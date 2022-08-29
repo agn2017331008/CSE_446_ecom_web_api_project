@@ -2,6 +2,7 @@ const ErrorHander = require("../utils/errorhander");
 const catchAsyncErrors = require("./catchAsyncErrors");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
+const BankUser = require("../models/bankUserModel")
 
 exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
   const { token } = req.cookies;
@@ -16,6 +17,22 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
 
   next();
 });
+
+
+exports.isAuthenticatedbankUser = catchAsyncErrors(async (req, res, next) => {
+  const { bankusertoken } = req.cookies;
+
+  if (!bankusertoken) {
+    return next(new ErrorHander("Please Login with bank details to access this resource", 401));
+  }
+
+  const decodedData = jwt.verify(bankusertoken, process.env.JWT_SECRET);
+
+  req.bankuser = await BankUser.findById(decodedData.id);
+
+  next();
+});
+
 
 exports.authorizeRoles = (...roles) => {
   return (req, res, next) => {

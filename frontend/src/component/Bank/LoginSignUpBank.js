@@ -1,19 +1,21 @@
 import React, { Fragment, useRef, useState, useEffect } from "react";
-import "./LoginSignUp.css";
+import "./LoginSignUpBank.css";
 import Loader from "../layout/Loader/Loader";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
-import FaceIcon from "@material-ui/icons/Face";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, login, register } from "../../actions/userAction";
+import { clearErrors, loginBankUser, registerBankUser } from "../../actions/bankuserAction";
 import { useAlert } from "react-alert";
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
-const LoginSignUp = () => {
+const LoginSignUpBank = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
 
-  const { error, loading, isAuthenticated } = useSelector((state) => state.user);
+  const { error, loading, isAuthenticated } = useSelector(
+    (state) => state.bankuser
+  );
 
   const loginTab = useRef(null);
   const registerTab = useRef(null);
@@ -22,20 +24,19 @@ const LoginSignUp = () => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-  const [user, setUser] = useState({
-    name: "",
+  const [bankuser, setUser] = useState({
     email: "",
     password: "",
+    balance: 0
   });
 
-  const { name, email, password } = user;
-
-  const [avatar, setAvatar] = useState("/Profile.png");
-  const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
+  const { email, password, balance } = bankuser;
 
   const loginSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(loginEmail, loginPassword));
+    console.log(loginEmail, loginPassword);
+    dispatch(loginBankUser(loginEmail, loginPassword));
+    
   };
 
   const registerSubmit = (e) => {
@@ -43,33 +44,20 @@ const LoginSignUp = () => {
 
     const myForm = new FormData();
 
-    myForm.set("name", name);
     myForm.set("email", email);
     myForm.set("password", password);
-    myForm.set("avatar", avatar);
-    dispatch(register(myForm));
+    myForm.set("balance", balance);
+    dispatch(registerBankUser(myForm));
   };
 
   const registerDataChange = (e) => {
-    if (e.target.name === "avatar") {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setAvatarPreview(reader.result);
-          setAvatar(reader.result);
-        }
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    } else {
-      setUser({ ...user, [e.target.name]: e.target.value });
-    }
+    setUser({ ...bankuser, [e.target.name]: e.target.value });
   };
 
   const location = useLocation();
-  // console.log(location);
+ 
   const redirect = location.search ? location.search.split("=")[1] : "account";
-  // console.log('redirect: ' + redirect);
+//   console.log('redirect: ' + redirect);
 
   const navigate = useNavigate();
 
@@ -79,7 +67,9 @@ const LoginSignUp = () => {
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
-      navigate("/" + redirect);
+       
+        navigate("/bankaccount");
+    //   navigate("/" + redirect);
     }
   }, [dispatch, error, alert, isAuthenticated, redirect]);
 
@@ -136,8 +126,8 @@ const LoginSignUp = () => {
                     onChange={(e) => setLoginPassword(e.target.value)}
                   />
                 </div>
-                <Link to="/password/forgot">Forget Password ?</Link>
-                <input type="submit" value="Login" className="loginBtn" />
+
+                <input type="submit" value="Bank Login" className="loginBtn" />
               </form>
               <form
                 className="signUpForm"
@@ -145,17 +135,6 @@ const LoginSignUp = () => {
                 encType="multipart/form-data"
                 onSubmit={registerSubmit}
               >
-                <div className="signUpName">
-                  <FaceIcon />
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    required
-                    name="name"
-                    value={name}
-                    onChange={registerDataChange}
-                  />
-                </div>
                 <div className="signUpEmail">
                   <MailOutlineIcon />
                   <input
@@ -178,17 +157,19 @@ const LoginSignUp = () => {
                     onChange={registerDataChange}
                   />
                 </div>
-
-                <div id="registerImage">
-                  <img src={avatarPreview} alt="Avatar Preview" />
+                <div className="signUpBalance">
+                  <MonetizationOnIcon />
                   <input
-                    type="file"
-                    name="avatar"
-                    accept="image/*"
+                    type="number"
+                    placeholder="Balance"
+                    required
+                    name="balance"
+                    value={balance}
                     onChange={registerDataChange}
                   />
                 </div>
-                <input type="submit" value="Register" className="signUpBtn" />
+
+                <input type="submit" value="Bank Register" className="signUpBtn" />
               </form>
             </div>
           </div>
@@ -198,5 +179,5 @@ const LoginSignUp = () => {
   );
 };
 
-export default LoginSignUp;
+export default LoginSignUpBank;
 // export default withRouter(LoginSignUp);

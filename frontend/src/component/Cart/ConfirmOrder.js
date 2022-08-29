@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 const ConfirmOrder = ({ history }) => {
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.user);
+  const { frombankuser } = useSelector((state) => state.bankuser);
 
   const subtotal = cartItems.reduce(
     (acc, item) => acc + item.quantity * item.price,
@@ -35,6 +36,8 @@ const ConfirmOrder = ({ history }) => {
     };
 
     sessionStorage.setItem("orderInfo", JSON.stringify(data));
+
+ 
 
     navigate("/process/payment");
   };
