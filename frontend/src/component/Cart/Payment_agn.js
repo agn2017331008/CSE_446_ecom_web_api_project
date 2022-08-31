@@ -42,7 +42,7 @@ const Payment = () => {
   };
 
   console.log(bankuser._id)
-  console.log(cartItems[0].supplier_bank_id)
+  console.log(cartItems[0])
 
   const order = {
     shippingInfo,
@@ -74,7 +74,7 @@ const Payment = () => {
 
       order.paymentInfo = {
         id: transaction_id,
-        status: "succeed",
+        status: "succeeded",
       };
 
       dispatch(createOrder(order));

@@ -35,6 +35,7 @@ const UserOptions = ({ user }) => {
       func: cart,
     },
     { icon: <ExitToAppIcon />, name: "Logout", func: logoutUser },
+   
   ];
 
   if (user.role === "admin") {

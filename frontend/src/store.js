@@ -35,14 +35,14 @@ const reducer = combineReducers({
   cart: cartReducer,
   newOrder: newOrderReducer,
   bankuser: bankuserReducer,
-  // myOrders: myOrdersReducer,
-  // orderDetails: orderDetailsReducer,
-  // newProduct: newProductReducer,
-  // product: productReducer,
-  // allOrders: allOrdersReducer,
-  // order: orderReducer,
-  // allUsers: allUsersReducer,
-  // userDetails: userDetailsReducer,
+  myOrders: myOrdersReducer,
+  orderDetails: orderDetailsReducer,
+  newProduct: newProductReducer,
+  product: productReducer,
+  allOrders: allOrdersReducer,
+  order: orderReducer,
+  allUsers: allUsersReducer,
+  userDetails: userDetailsReducer,
 });
 
 let initialState = {
